@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./Battle.module.css";
 
-function Battle() {
+function BattleInitiated() {
   return <div id="overlappingDiv" className={styles.battle}></div>;
 }
 
-export default Battle;
+export default BattleInitiated;

@@ -10,7 +10,7 @@ import {
 } from "./Utils";
 import { BattleZones } from "./Data/BattleZones";
 import { IBattle } from "./Interfaces/IBattle";
-import Battle from "./Components/Battle/BattleInitiated";
+import BattleInitiated from "./Components/Battle/BattleInitiated";
 import {
   background,
   battleBackground,
@@ -313,7 +313,7 @@ function App() {
 
   return (
     <div ref={app} className={styles.mainFrame}>
-      <Battle></Battle>
+      <BattleInitiated></BattleInitiated>
       <Canvas innerRef={canvasRef}></Canvas>;<BattleInterface></BattleInterface>
     </div>
   );

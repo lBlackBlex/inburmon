@@ -48,3 +48,52 @@
 .attackButton:hover {
   background-color: #ddd;
 }
+
+.oponentHealthContainer {
+  background-color: white;
+  width: 250px;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  border: 4px black solid;
+  padding: 16px;
+}
+
+.playerHealthContainer {
+  background-color: white;
+  width: 250px;
+  position: absolute;
+  top: 330px;
+  right: 50px;
+  border: 4px black solid;
+  padding: 16px;
+}
+
+.oponentHealthContainer > h1 {
+  font-size: 16px;
+}
+
+.playerHealthContainer > h1 {
+  font-size: 16px;
+}
+
+.healthBar {
+  position: relative;
+}
+
+.healthBar > div {
+  height: 5px;
+}
+
+.healthBarBackground {
+  background-color: #ccc;
+  margin-top: 10px;
+}
+
+.healthBarMain {
+  background-color: green;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
