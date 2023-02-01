@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import "./App.css";
 import Canvas from "./Components/Canvas/Canvas";
 import { MovementKeys } from "./Enums/MovementKeys";
 import { collisions } from "./Data/collisions";
@@ -11,7 +10,7 @@ import {
 } from "./Utils";
 import { BattleZones } from "./Data/BattleZones";
 import { IBattle } from "./Interfaces/IBattle";
-import Battle from "./Components/Battle";
+import Battle from "./Components/Battle/BattleInitiated";
 import {
   background,
   battleBackground,
@@ -27,6 +26,9 @@ import {
   player,
 } from "./Constants";
 import { gsap } from "gsap";
+import BattleInterface from "./Components/Battle/BattleInterface";
+import styles from "./App.module.css";
+import "./assets/Fonts/PressStart2P-Regular.ttf";
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -98,8 +100,8 @@ function App() {
   const draw = (ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = canvasBackground;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    animate();
-    // animateBattle();
+    // animate();
+    animateBattle();
   };
 
   const loadMap = (ctx: CanvasRenderingContext2D) => {
@@ -310,9 +312,9 @@ function App() {
   }, [showBattle]);
 
   return (
-    <div ref={app} className="app">
+    <div ref={app} className={styles.mainFrame}>
       <Battle></Battle>
-      <Canvas innerRef={canvasRef}></Canvas>;
+      <Canvas innerRef={canvasRef}></Canvas>;<BattleInterface></BattleInterface>
     </div>
   );
 }

@@ -24,6 +24,7 @@ export class Boundary {
   }
 
   set yPosition(y: number) {
+    WritableStreamDefaultWriter;
     this.position.y = y;
   }
 
