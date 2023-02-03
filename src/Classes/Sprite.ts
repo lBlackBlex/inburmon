@@ -1,4 +1,8 @@
 import { ISprite } from "../Interfaces/ISprite";
+import gsap from "gsap";
+import { Attacks } from "../Enums/Attacks";
+import { IBattleAttack } from "../Interfaces/IBattle";
+import { fireball } from "../Constants";
 
 export class Sprite {
   private position;
@@ -8,6 +12,10 @@ export class Sprite {
   private animate;
   private width = 0;
   private height = 0;
+  private opacity = 1;
+  private isEnemy;
+  private show;
+  private rotation;
 
   constructor({
     position,
@@ -15,6 +23,9 @@ export class Sprite {
     frames = { max: 1, hold: 10 },
     sprites,
     animate = false,
+    isEnemy = false,
+    show = true,
+    rotation = 0,
   }: ISprite) {
     this.position = position;
     this.image = image;
@@ -27,28 +38,101 @@ export class Sprite {
 
     this.animate = animate;
     this.sprites = sprites;
+    this.isEnemy = isEnemy;
+    this.show = show;
+    this.rotation = rotation;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.drawImage(
-      this.image,
-      this.frames.val * this.width,
-      0,
-      this.image.width / this.frames.max,
-      this.image.height,
-      this.position.x,
-      this.position.y,
-      this.image.width / this.frames.max,
-      this.image.height
-    );
+    if (this.show) {
+      ctx.save();
+      ctx.translate(
+        this.position.x + this.width / 2,
+        this.position.y + this.height / 2
+      );
+      ctx.rotate(this.rotation);
+      ctx.translate(
+        -this.position.x - this.width / 2,
+        -this.position.y - this.height / 2
+      );
+      ctx.globalAlpha = this.opacity;
+      ctx.drawImage(
+        this.image,
+        this.frames.val * this.width,
+        0,
+        this.image.width / this.frames.max,
+        this.image.height,
+        this.position.x,
+        this.position.y,
+        this.image.width / this.frames.max,
+        this.image.height
+      );
+      ctx.restore();
 
-    if (!this.animate) return;
+      if (!this.animate) return;
 
-    if (this.frames.max > 1) this.frames.elapsed++;
+      if (this.frames.max > 1) this.frames.elapsed++;
 
-    if (this.frames.elapsed % this.frames.hold === 0) {
-      if (this.frames.val < this.frames.max - 1) this.frames.val++;
-      else this.frames.val = 0;
+      if (this.frames.elapsed % this.frames.hold === 0) {
+        if (this.frames.val < this.frames.max - 1) this.frames.val++;
+        else this.frames.val = 0;
+      }
+    }
+  }
+
+  attack({ attack, recipient }: IBattleAttack) {
+    switch (attack.name) {
+      case Attacks.Validando:
+        const timeLine = gsap.timeline();
+        let movementDistance = 20;
+        if (this.isEnemy) movementDistance = -20;
+        timeLine
+          .to(this.position, {
+            x: this.position.x - movementDistance,
+          })
+          .to(this.position, {
+            x: this.position.x + movementDistance * 2,
+            duration: 0.1,
+            onComplete() {
+              gsap.to(recipient.position, {
+                x: recipient.position.x + 10,
+                yoyo: true,
+                repeat: 5,
+                duration: 0.08,
+              });
+              gsap.to(recipient, {
+                opacity: 0,
+                repeat: 5,
+                yoyo: true,
+                duration: 0.08,
+              });
+            },
+          })
+          .to(this.position, { x: this.position.x });
+        break;
+      case Attacks.Inyeccion:
+        console.log("fireball");
+        fireball.setShow = true;
+        gsap.to(fireball.position, {
+          x: recipient.position.x,
+          y: recipient.position.y,
+          onComplete: () => {
+            gsap.to(recipient.position, {
+              x: recipient.position.x + 10,
+              yoyo: true,
+              repeat: 5,
+              duration: 0.08,
+            });
+            gsap.to(recipient, {
+              opacity: 0,
+              repeat: 5,
+              yoyo: true,
+              duration: 0.08,
+            });
+            fireball.setShow = false;
+          },
+        });
+        break;
     }
   }
 
@@ -86,5 +170,13 @@ export class Sprite {
 
   get getSprites() {
     return this.sprites;
+  }
+
+  set setShow(show: boolean) {
+    this.show = show;
+  }
+
+  set setRotation(rotation: number) {
+    this.rotation = rotation;
   }
 }

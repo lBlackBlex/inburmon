@@ -9,7 +9,7 @@ import {
   requestAnimation,
 } from "./Utils";
 import { BattleZones } from "./Data/BattleZones";
-import { IBattle } from "./Interfaces/IBattle";
+import { IBattleAnimation } from "./Interfaces/IBattle";
 import BattleInitiated from "./Components/Battle/BattleInitiated";
 import {
   background,
@@ -20,6 +20,7 @@ import {
   canvasWidth,
   draggle,
   emby,
+  fireball,
   foreground,
   keys,
   mapOffset,
@@ -88,7 +89,7 @@ function App() {
     return battleZones;
   }, [BattleZones]);
 
-  const battle: IBattle = {
+  const battle: IBattleAnimation = {
     initiated: false,
   };
 
@@ -165,7 +166,8 @@ function App() {
     battleBackground.draw(ctx);
     draggle.draw(ctx);
     emby.draw(ctx);
-    console.log("battle animation");
+    fireball.draw(ctx);
+    // console.log("battle animation");
   };
 
   const animate = () => {

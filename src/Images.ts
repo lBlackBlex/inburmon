@@ -7,6 +7,7 @@ import playerRight from "./assets/player/right.png";
 import battleBackground from "./assets/battle/background.png";
 import draggle from "./assets/battle/draggle.png";
 import emby from "./assets/battle/emby.png";
+import fireball from "./assets/battle/fireball.png";
 
 const mapImg = new Image();
 mapImg.src = gameMap;
@@ -35,6 +36,9 @@ draggleImg.src = draggle;
 const embyImg = new Image();
 embyImg.src = emby;
 
+const fireballImg = new Image();
+fireballImg.src = fireball;
+
 export {
   mapImg,
   foregroundImg,
@@ -45,4 +49,5 @@ export {
   battleBackgroundImg,
   draggleImg,
   embyImg,
+  fireballImg,
 };

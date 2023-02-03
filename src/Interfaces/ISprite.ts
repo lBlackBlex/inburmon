@@ -16,4 +16,7 @@ export interface ISprite {
     down: HTMLImageElement;
   };
   animate?: boolean;
+  isEnemy?: boolean;
+  show?: boolean;
+  rotation?: number;
 }
