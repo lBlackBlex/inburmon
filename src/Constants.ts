@@ -27,6 +27,7 @@ const background = new Sprite({
     y: mapOffset.y,
   },
   image: mapImg,
+  name: "",
 });
 
 const battleBackground = new Sprite({
@@ -35,6 +36,7 @@ const battleBackground = new Sprite({
     y: 0,
   },
   image: battleBackgroundImg,
+  name: "",
 });
 
 const foreground = new Sprite({
@@ -43,6 +45,7 @@ const foreground = new Sprite({
     y: mapOffset.y,
   },
   image: foregroundImg,
+  name: "",
 });
 
 const player = new Sprite({
@@ -61,6 +64,7 @@ const player = new Sprite({
     right: playerRightImg,
     down: playerDownImg,
   },
+  name: "",
 });
 
 const draggle = new Sprite({
@@ -75,6 +79,7 @@ const draggle = new Sprite({
   },
   animate: true,
   isEnemy: true,
+  name: "Draggle",
 });
 
 const emby = new Sprite({
@@ -88,6 +93,7 @@ const emby = new Sprite({
     hold: 30,
   },
   animate: true,
+  name: "Toluca I",
 });
 
 const keys = {
@@ -129,6 +135,7 @@ const fireball = new Sprite({
   },
   animate: true,
   rotation: 1,
+  name: "",
 });
 
 export {

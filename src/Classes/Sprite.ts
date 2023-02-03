@@ -16,6 +16,7 @@ export class Sprite {
   private isEnemy;
   private show;
   private rotation;
+  private name;
 
   constructor({
     position,
@@ -26,6 +27,7 @@ export class Sprite {
     isEnemy = false,
     show = true,
     rotation = 0,
+    name,
   }: ISprite) {
     this.position = position;
     this.image = image;
@@ -41,6 +43,7 @@ export class Sprite {
     this.isEnemy = isEnemy;
     this.show = show;
     this.rotation = rotation;
+    this.name = name;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -178,5 +181,13 @@ export class Sprite {
 
   set setRotation(rotation: number) {
     this.rotation = rotation;
+  }
+
+  get getName() {
+    return this.name;
+  }
+
+  set setName(name: string) {
+    this.name = name;
   }
 }

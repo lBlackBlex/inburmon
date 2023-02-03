@@ -19,4 +19,5 @@ export interface ISprite {
   isEnemy?: boolean;
   show?: boolean;
   rotation?: number;
+  name: string;
 }
