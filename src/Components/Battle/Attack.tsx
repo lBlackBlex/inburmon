@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Sprite } from "../../Classes/Sprite";
 import {
   draggle,
   emby,
@@ -8,16 +9,28 @@ import {
 } from "../../Constants";
 import { BattleTurn } from "../../Enums/BattleTurn";
 import { useBattleInfo } from "../../Hooks/UseBattle";
-import { IAttack } from "../../Interfaces/IBattle";
+import { IAttack, IHealths } from "../../Interfaces/IBattle";
+import { IBeast } from "../../Interfaces/IBeast";
 import AttackDialog from "./AttackDialog";
 import styles from "./Battle.module.css";
+import HealthBar from "./HealthBar";
 
 const Attack = () => {
   const { attack, turn, setBattleInfo } = useBattleInfo();
   const [showDialog, setShowDialog] = useState(false);
   const [dialog, setDialog] = useState("");
 
-  const battleAttackSetup = (attack: IAttack) => {
+  const [oponent, setOponent] = useState<IBeast>({
+    name: "Draggle",
+    health: 100,
+  });
+
+  const [player, setPlayer] = useState<IBeast>({
+    name: "Toluca I",
+    health: 100,
+  });
+
+  const battleAttackSetup = (attack: IAttack, useCallback: boolean) => {
     const { atacker, recipient } = getTurns();
     setDialog(`${atacker.getName} uso ${attack.name}`);
     setBattleInfo({
@@ -35,33 +48,34 @@ const Attack = () => {
         damage: attack.damage,
       },
       recipient: recipient,
+      callback: setShowDialog,
+      useCallback,
     });
   };
 
-  const setType = (
+  const playerAttack = (
     attackName: string,
     attackType: string,
     attackDamage: number
   ) => {
     setShowDialog(true);
-    fireball.setRotation = turn == BattleTurn.Player ? 1 : -2.2;
-    battleAttackSetup({
-      name: attackName,
-      type: attackType,
-      damage: attackDamage,
-    });
+    fireball.setRotation = 1;
+    battleAttackSetup(
+      {
+        name: attackName,
+        type: attackType,
+        damage: attackDamage,
+      },
+      false
+    );
   };
 
   const oponentAttack = () => {
     const selectedAttack =
       oponentAttacks[Math.floor(Math.random() * oponentAttacks.length)];
 
-    console.log(selectedAttack);
-    battleAttackSetup(selectedAttack);
-
-    setTimeout(() => {
-      setShowDialog(false);
-    }, 2000);
+    fireball.setRotation = -2.2;
+    battleAttackSetup(selectedAttack, true);
   };
 
   const getTurns = () => {
@@ -70,37 +84,72 @@ const Attack = () => {
     return { atacker, recipient };
   };
 
-  useEffect(() => {
-    if (turn != BattleTurn.Player)
+  const setFainted = (monster: Sprite) => {
+    monster.faint();
+    setShowDialog(true);
+    setDialog(`${monster.getName} ha caido.`);
+  };
+
+  const oponentTurn = () => {
+    const newHealth = player.health - attack.damage;
+    setPlayer({
+      ...player,
+      health: newHealth,
+    });
+    if (newHealth <= 0) {
+      setFainted(emby);
+    } else {
+      console.log("con");
+    }
+  };
+
+  const playerTurn = () => {
+    const newHealth = oponent.health - attack.damage;
+    setOponent({
+      ...oponent,
+      health: newHealth < 0 ? 0 : newHealth,
+    });
+    if (newHealth <= 0) {
+      setFainted(draggle);
+    } else {
       setTimeout(() => {
         oponentAttack();
       }, 2000);
-  }, [turn]);
+    }
+  };
 
   return (
-    <div className={styles.battleMenu}>
-      {showDialog && (
-        <AttackDialog>
-          <div>{dialog}</div>
-        </AttackDialog>
-      )}
-      <div className={styles.attacks}>
-        {playerAttacks.map(({ name, type, damage }) => (
-          <button
-            key={name}
-            className={styles.attackButton}
-            onClick={() => setType(name, type, damage)}
-          >
-            {name}
-          </button>
-        ))}
+    <>
+      <HealthBar
+        oponent={oponent}
+        player={player}
+        playerTurn={playerTurn}
+        oponentTurn={oponentTurn}
+      ></HealthBar>
+      <div className={styles.battleMenu}>
+        {showDialog && (
+          <AttackDialog>
+            <div>{dialog}</div>
+          </AttackDialog>
+        )}
+        <div className={styles.attacks}>
+          {playerAttacks.map(({ name, type, damage }) => (
+            <button
+              key={name}
+              className={styles.attackButton}
+              onClick={() => playerAttack(name, type, damage)}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+        <div className={styles.attackType}>
+          <h1 className={styles.attackTypeText}>
+            {attack.type.length > 0 ? attack.type : "Attack Type"}
+          </h1>
+        </div>
       </div>
-      <div className={styles.attackType}>
-        <h1 className={styles.attackTypeText}>
-          {attack.type.length > 0 ? attack.type : "Attack Type"}
-        </h1>
-      </div>
-    </div>
+    </>
   );
 };
 

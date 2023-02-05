@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { IBattleAttack } from "../Interfaces/IBattle";
 import { fireball } from "../Constants";
 import { OponentAttacks, PlayerAttacks } from "../Enums/Attacks";
+import { Dispatch, SetStateAction } from "react";
 
 export class Sprite {
   private position;
@@ -83,34 +84,34 @@ export class Sprite {
     }
   }
 
-  attack({ attack, recipient }: IBattleAttack) {
+  attack({ attack, recipient, callback, useCallback }: IBattleAttack) {
     switch (attack.name) {
       case PlayerAttacks.Validando:
-        this.normalAttack(recipient);
+        this.normalAttack(recipient, callback, useCallback);
         break;
       case PlayerAttacks.Attack3:
-        this.normalAttack(recipient);
+        this.normalAttack(recipient, callback, useCallback);
         break;
       case PlayerAttacks.Attack4:
-        this.normalAttack(recipient);
+        this.normalAttack(recipient, callback, useCallback);
         break;
       case PlayerAttacks.Inyeccion:
-        this.specialAttack(recipient);
+        this.specialAttack(recipient, callback, useCallback);
         break;
       case OponentAttacks.Quesadilla:
-        this.normalAttack(recipient);
+        this.normalAttack(recipient, callback, useCallback);
         break;
       case OponentAttacks.Documentacion:
-        this.normalAttack(recipient);
+        this.normalAttack(recipient, callback, useCallback);
         break;
       case OponentAttacks.Granito:
-        this.normalAttack(recipient);
+        this.normalAttack(recipient, callback, useCallback);
         break;
       case OponentAttacks.Version:
-        this.specialAttack(recipient);
+        this.specialAttack(recipient, callback, useCallback);
         break;
       case OponentAttacks.RF:
-        this.specialAttack(recipient);
+        this.specialAttack(recipient, callback, useCallback);
         break;
     }
   }
@@ -171,7 +172,11 @@ export class Sprite {
     this.name = name;
   }
 
-  private normalAttack(recipient: Sprite) {
+  private normalAttack(
+    recipient: Sprite,
+    callback: Dispatch<SetStateAction<boolean>>,
+    useCallback: boolean
+  ) {
     const timeLine = gsap.timeline();
     let movementDistance = 20;
     if (this.isEnemy) movementDistance = -20;
@@ -195,12 +200,19 @@ export class Sprite {
             yoyo: true,
             duration: 0.08,
           });
+          if (useCallback) {
+            callback(false);
+          }
         },
       })
       .to(this.position, { x: this.position.x });
   }
 
-  private specialAttack(recipient: Sprite) {
+  private specialAttack(
+    recipient: Sprite,
+    callback: Dispatch<SetStateAction<boolean>>,
+    useCallback: boolean
+  ) {
     console.log("fireball");
     fireball.setShow = true;
     gsap.to(fireball.position, {
@@ -220,6 +232,9 @@ export class Sprite {
           duration: 0.08,
         });
         fireball.setShow = false;
+        if (useCallback) {
+          callback(false);
+        }
       },
     });
   }
