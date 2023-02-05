@@ -1,8 +1,8 @@
 import { ISprite } from "../Interfaces/ISprite";
 import gsap from "gsap";
-import { Attacks } from "../Enums/Attacks";
 import { IBattleAttack } from "../Interfaces/IBattle";
 import { fireball } from "../Constants";
+import { OponentAttacks, PlayerAttacks } from "../Enums/Attacks";
 
 export class Sprite {
   private position;
@@ -85,58 +85,38 @@ export class Sprite {
 
   attack({ attack, recipient }: IBattleAttack) {
     switch (attack.name) {
-      case Attacks.Validando:
-        const timeLine = gsap.timeline();
-        let movementDistance = 20;
-        if (this.isEnemy) movementDistance = -20;
-        timeLine
-          .to(this.position, {
-            x: this.position.x - movementDistance,
-          })
-          .to(this.position, {
-            x: this.position.x + movementDistance * 2,
-            duration: 0.1,
-            onComplete() {
-              gsap.to(recipient.position, {
-                x: recipient.position.x + 10,
-                yoyo: true,
-                repeat: 5,
-                duration: 0.08,
-              });
-              gsap.to(recipient, {
-                opacity: 0,
-                repeat: 5,
-                yoyo: true,
-                duration: 0.08,
-              });
-            },
-          })
-          .to(this.position, { x: this.position.x });
+      case PlayerAttacks.Validando:
+        this.normalAttack(recipient);
         break;
-      case Attacks.Inyeccion:
-        console.log("fireball");
-        fireball.setShow = true;
-        gsap.to(fireball.position, {
-          x: recipient.position.x,
-          y: recipient.position.y,
-          onComplete: () => {
-            gsap.to(recipient.position, {
-              x: recipient.position.x + 10,
-              yoyo: true,
-              repeat: 5,
-              duration: 0.08,
-            });
-            gsap.to(recipient, {
-              opacity: 0,
-              repeat: 5,
-              yoyo: true,
-              duration: 0.08,
-            });
-            fireball.setShow = false;
-          },
-        });
+      case PlayerAttacks.Attack3:
+        this.normalAttack(recipient);
+        break;
+      case PlayerAttacks.Attack4:
+        this.normalAttack(recipient);
+        break;
+      case PlayerAttacks.Inyeccion:
+        this.specialAttack(recipient);
+        break;
+      case OponentAttacks.Quesadilla:
+        this.normalAttack(recipient);
+        break;
+      case OponentAttacks.Documentacion:
+        this.normalAttack(recipient);
+        break;
+      case OponentAttacks.Granito:
+        this.normalAttack(recipient);
+        break;
+      case OponentAttacks.Version:
+        this.specialAttack(recipient);
+        break;
+      case OponentAttacks.RF:
+        this.specialAttack(recipient);
         break;
     }
+  }
+
+  faint() {
+    console.log("faint", this.name);
   }
 
   set yPosition(y: number) {
@@ -189,5 +169,58 @@ export class Sprite {
 
   set setName(name: string) {
     this.name = name;
+  }
+
+  private normalAttack(recipient: Sprite) {
+    const timeLine = gsap.timeline();
+    let movementDistance = 20;
+    if (this.isEnemy) movementDistance = -20;
+    timeLine
+      .to(this.position, {
+        x: this.position.x - movementDistance,
+      })
+      .to(this.position, {
+        x: this.position.x + movementDistance * 2,
+        duration: 0.1,
+        onComplete() {
+          gsap.to(recipient.position, {
+            x: recipient.position.x + 10,
+            yoyo: true,
+            repeat: 5,
+            duration: 0.08,
+          });
+          gsap.to(recipient, {
+            opacity: 0,
+            repeat: 5,
+            yoyo: true,
+            duration: 0.08,
+          });
+        },
+      })
+      .to(this.position, { x: this.position.x });
+  }
+
+  private specialAttack(recipient: Sprite) {
+    console.log("fireball");
+    fireball.setShow = true;
+    gsap.to(fireball.position, {
+      x: recipient.position.x,
+      y: recipient.position.y,
+      onComplete: () => {
+        gsap.to(recipient.position, {
+          x: recipient.position.x + 10,
+          yoyo: true,
+          repeat: 5,
+          duration: 0.08,
+        });
+        gsap.to(recipient, {
+          opacity: 0,
+          repeat: 5,
+          yoyo: true,
+          duration: 0.08,
+        });
+        fireball.setShow = false;
+      },
+    });
   }
 }

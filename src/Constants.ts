@@ -1,5 +1,5 @@
 import { Sprite } from "./Classes/Sprite";
-import { Attacks } from "./Enums/Attacks";
+import { OponentAttacks, PlayerAttacks } from "./Enums/Attacks";
 import {
   battleBackgroundImg,
   draggleImg,
@@ -116,10 +116,18 @@ const BATTLE_PROBABILITY = 0.01;
 const canvasBackground = "#3A3A52";
 
 const playerAttacks = [
-  { name: Attacks.Validando, type: "Normal", damage: 10 },
-  { name: Attacks.Inyeccion, type: "Fuego", damage: 50 },
-  { name: Attacks.Attack3, type: "Attack Type", damage: 10 },
-  { name: Attacks.Attack4, type: "Attack Type", damage: 10 },
+  { name: PlayerAttacks.Validando, type: "Normal", damage: 10 },
+  { name: PlayerAttacks.Inyeccion, type: "Fuego", damage: 50 },
+  { name: PlayerAttacks.Attack3, type: "Attack Type", damage: 10 },
+  { name: PlayerAttacks.Attack4, type: "Attack Type", damage: 10 },
+];
+
+const oponentAttacks = [
+  { name: OponentAttacks.Granito, type: "Granito", damage: 35 },
+  { name: OponentAttacks.RF, type: "Normal", damage: 50 },
+  { name: OponentAttacks.Version, type: "Fuego", damage: 40 },
+  { name: OponentAttacks.Quesadilla, type: "Queso", damage: 10 },
+  { name: OponentAttacks.Documentacion, type: "Tecnico", damage: 30 },
 ];
 
 const fireball = new Sprite({
@@ -153,4 +161,5 @@ export {
   emby,
   playerAttacks,
   fireball,
+  oponentAttacks,
 };

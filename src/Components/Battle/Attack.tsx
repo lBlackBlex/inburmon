@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { draggle, emby, fireball, playerAttacks } from "../../Constants";
+import {
+  draggle,
+  emby,
+  fireball,
+  oponentAttacks,
+  playerAttacks,
+} from "../../Constants";
 import { BattleTurn } from "../../Enums/BattleTurn";
 import { useBattleInfo } from "../../Hooks/UseBattle";
 import { IAttack } from "../../Interfaces/IBattle";
@@ -48,7 +54,7 @@ const Attack = () => {
 
   const oponentAttack = () => {
     const selectedAttack =
-      playerAttacks[Math.floor(Math.random() * playerAttacks.length)];
+      oponentAttacks[Math.floor(Math.random() * oponentAttacks.length)];
 
     console.log(selectedAttack);
     battleAttackSetup(selectedAttack);
